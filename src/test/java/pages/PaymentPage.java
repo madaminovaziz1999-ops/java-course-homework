@@ -3,6 +3,7 @@ package pages;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import io.qameta.allure.Step;
 
 public class PaymentPage extends BasePage {
 
@@ -26,30 +27,40 @@ public class PaymentPage extends BasePage {
         return driver.findElements(paymentLogos).size();
     }
 
+    // ===== ПРОВЕРКИ (пункт 1) =====
+
+    public boolean isPhoneFieldVisible() {
+        return waitUntilVisible(phoneInput).isDisplayed();
+    }
+
+    public boolean isSumFieldVisible() {
+        return waitUntilVisible(sumInput).isDisplayed();
+    }
+
+    public boolean isContinueButtonVisible() {
+        return waitUntilVisible(continueButton).isDisplayed();
+    }
+
+    // ===== ДЕЙСТВИЯ =====
+
+    @Step("Заполнение телефона: {phone}")
     public void fillPhone(String phone) {
-
         WebElement input = waitUntilVisible(phoneInput);
-
         input.clear();
-
         input.sendKeys(phone);
-
-        input.sendKeys(org.openqa.selenium.Keys.TAB);
     }
 
+    @Step("Заполнение суммы: {sum}")
     public void fillSum(String sum) {
-        waitUntilVisible(sumInput).sendKeys(sum);
+        WebElement input = waitUntilVisible(sumInput);
+        input.clear();
+        input.sendKeys(sum);
     }
 
+    @Step("Нажатие кнопки Продолжить")
     public void clickContinue() {
-
         WebElement button = waitUntilClickable(continueButton);
-
         scrollToElement(button);
-
         jsClick(button);
-
-        wait.until(d -> driver.findElements(By.tagName("iframe")).size() > 0);
     }
-
 }
